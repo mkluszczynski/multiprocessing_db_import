@@ -14,4 +14,10 @@ Then use script to create docker instance of database:
 cli/start_db
 ```
 
+Remember to download all dependencies:
+
+```bash
+pip3 install -r requirements.txt
+```
+
 Now you should be good to go.
