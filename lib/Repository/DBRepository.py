@@ -58,7 +58,7 @@ class DBRepository(ABC):
         query = f"CREATE TABLE {table_name} ("
 
         for index, column in enumerate(columns):
-            query += f" {column} varchar(255)"
+            query += f" {column} TEXT"
             if index < len(columns) - 1:
                 query += ", "
 
