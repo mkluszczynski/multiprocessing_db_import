@@ -63,9 +63,6 @@ class DBRepository(ABC):
 
         query += ")"
 
-        print(query)
-        # exit()
-
         try:
             self.__cursor.execute(query)
         except:
@@ -111,7 +108,7 @@ class DBRepository(ABC):
 
         query += ")"
         
-        print(query % tuple(valuesList))
+        # print(query % tuple(valuesList))
         return query % tuple(valuesList)
 
     def __execQuery(self, query, select_options: list):

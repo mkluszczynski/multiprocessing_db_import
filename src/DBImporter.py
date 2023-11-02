@@ -1,5 +1,3 @@
-# import os, sys, pathlib
-# sys.path.append(str(pathlib.Path.cwd()))
 from unidecode import unidecode
 from lib.Repository.DBRepository import DBRepository
 from lib.Repository.CSVRepository import CSVRepository
@@ -19,15 +17,17 @@ class DBImporter:
 
         data = csvRepo.find()
         self.__dbRepo.createTable(tableName, [self.__trimColumnName(column) for column in csvRepo.getColumns()])
+        print(f"Inserting {file_path} file...")
         for row in data:
             rowList = self.__prepareInsertData(row)
-            print(rowList)
             self.__dbRepo.add(
                     {
                         "insert": rowList,
                         "into": tableName
                     }
                 )
+
+        print(f"Inserted data from {file_path} to {tableName} table.")
 
     def __prepareInsertData(self, row: dict):
         return [{self.__trimColumnName(column): f"'{self.__replaceSpecialCharacters(value, ' ')}'"} for column, value in row.items() if column != ""]
