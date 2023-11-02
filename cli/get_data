@@ -1,0 +1,15 @@
+#! /usr/bin/env python3
+
+import os
+
+dataset_urls = [
+    "ishmaelkiptoo/us-electric-vehicle-population-data",
+    "qnqfbqfqo/crime-data-from-2020-to-present",
+    "victorahaji/worlds-air-quality-and-water-pollution-dataset",
+    "lsind18/genome-information-by-organism",
+    "ishmaelkiptoo/us-electric-vehicle-population-data",
+    
+]
+
+for url in dataset_urls:
+    os.system(f"kaggle datasets download -d {url} -p data/ --unzip")
