@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from colorama import Fore
 from lib.Repository.DBRepository import DBRepository
 from lib.Repository.CSVRepository import CSVRepository
 
@@ -17,7 +18,7 @@ class DBImporter:
 
         data = csvRepo.find()
         self.__dbRepo.createTable(tableName, [self.__trimColumnName(column) for column in csvRepo.getColumns()])
-        print(f"Inserting {file_path} file...")
+        print(f"{Fore.CYAN}Inserting {Fore.GREEN}{file_path} {Fore.CYAN}file...")
         for row in data:
             rowList = self.__prepareInsertData(row)
             self.__dbRepo.add(
@@ -27,7 +28,7 @@ class DBImporter:
                     }
                 )
 
-        print(f"Inserted data from {file_path} to {tableName} table.")
+        print(f"{Fore.CYAN}Inserted data from {Fore.GREEN}{file_path} {Fore.CYAN}to {Fore.GREEN}{tableName} {Fore.CYAN}table.")
 
     def __prepareInsertData(self, row: dict):
         return [{self.__trimColumnName(column): f"'{self.__replaceSpecialCharacters(value, ' ')}'"} for column, value in row.items() if column != ""]

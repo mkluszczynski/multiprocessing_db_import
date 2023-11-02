@@ -1,4 +1,5 @@
 from abc import ABC
+from colorama import Fore
 import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
@@ -66,8 +67,8 @@ class DBRepository(ABC):
         try:
             self.__cursor.execute(query)
         except:
-            print("Warning: Table already exists!")
-            print("Dropping table...")
+            print(f"{Fore.YELLOW}WARNING: {Fore.CYAN}Table already exists!")
+            print(f"{Fore.YELLOW}Dropping table...")
             self.__dropTable(table_name)
             self.__cursor.execute(query)
 
