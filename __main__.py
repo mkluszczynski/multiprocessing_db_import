@@ -17,4 +17,6 @@ dbImporter = DBImporter(dbRepo)
 data_files = listdir("data")
 
 for file in data_files:
+    if file == ".gitkeep": continue
+    print(file)
     dbImporter.importDataFromCsvFile("data/" + file)
