@@ -1,4 +1,5 @@
 import sys
+import time
 from unidecode import unidecode
 from colorama import Fore
 from lib.Repository.DBRepository import DBRepository
@@ -12,6 +13,7 @@ class DBImporter:
         self.__dbRepo = db_repo 
 
     def importDataFromCsvFile(self, file_path: str):
+        start = time.time()
         csvFile = open(file_path)
         csvRepo = CSVRepository(csvFile)
 
@@ -33,6 +35,8 @@ class DBImporter:
             self.__logInsertMessage(str(insertedNo), file_path, tableName)
             
         sys.stdout.write("\n")
+        end = time.time()
+        print(f"{Fore.CYAN}File {Fore.GREEN}{file_path} {Fore.CYAN}inserted in {Fore.MAGENTA}{int(end - start)}s")
             
 
         # print(f"{Fore.CYAN}Inserted data from {Fore.GREEN}{file_path} {Fore.CYAN}to {Fore.GREEN}{tableName} {Fore.CYAN}table.")
@@ -47,7 +51,7 @@ class DBImporter:
         return self.__replaceSpecialCharacters(columnName, "S")
 
     def __replaceSpecialCharacters(self, text: str, replace: str):
-        banned = ["'", "%", "!", "?", "%", "@", "$", "^", "&", "-", "(", ")"]
+        banned = ["'", '"', "%", "!", "?", "%", "@", "$", "^", "&", "-", "(", ")", "1", "."]
         final = unidecode(text).replace(" ", "")
         for ban in banned:
             final = final.replace(ban, replace)
@@ -56,7 +60,7 @@ class DBImporter:
 
 
     def __trimToTableName(self, file_path: str):
-        return file_path.replace("data/", "").replace(".csv", "")
+        return self.__replaceSpecialCharacters(file_path.replace("data/", "").replace(".csv", ""), "")
 
     
 
