@@ -1,5 +1,5 @@
 from os import listdir
-from multiprocessing import Pool
+from multiprocessing import Process
 from lib.Repository.DBRepository import DBRepository
 from utils.Config import Config
 from src.DBImporter import DBImporter
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     time.sleep(1,5)
 
     start = time.time()
-    pool = Pool()
-    pool.map(importig_data, data_files)
-    end = time.time()
+    p = Process(target=importig_data, args=data_files)
+    p.start()
+    p.join()
     print(f"Time taken using multiprocessing: {end-start}")
