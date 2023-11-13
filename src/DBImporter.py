@@ -12,7 +12,7 @@ class DBImporter:
     def __init__(self, db_repo: DBRepository) -> None:
         self.__dbRepo = db_repo 
 
-    def importDataFromCsvFile(self, file_path: str, log: bool = True):
+    def importDataFromCsvFile(self, file_path: str, log: bool = False):
         start = time.time()
         csvFile = open(file_path)
         csvRepo = CSVRepository(csvFile)
