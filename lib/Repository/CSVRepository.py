@@ -13,7 +13,7 @@ class CSVRepository(ABC):
         self.__data = []
         self.__csvFileReader = csv.reader(data_file)
 
-        self.__getColumns()
+        self.__columns = self.__getColumns()
         self.__mapData()
         data_file.close()
         
@@ -74,7 +74,7 @@ class CSVRepository(ABC):
         return resSelectList
 
     def __getColumns(self) -> list:
-        self.__columns = self.__csvFileReader.__next__()
+        return self.__csvFileReader.__next__()
 
     def getColumns(self):
         return self.__columns
