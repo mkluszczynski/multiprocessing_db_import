@@ -21,3 +21,8 @@ pip3 install -r requirements.txt
 ```
 
 Now you should be good to go.
+
+If you're working on Windows, to set up a docker paste this into the terminal:
+```bash
+docker compose -f docker/docker-compose.yaml up
+```
