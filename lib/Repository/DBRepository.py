@@ -67,8 +67,8 @@ class DBRepository(ABC):
         try:
             self.__cursor.execute(query)
         except:
-            print(f"{Fore.YELLOW}WARNING: {Fore.CYAN}Table already exists!")
-            print(f"{Fore.YELLOW}Dropping table...")
+            print(f"{Fore.YELLOW}WARNING: {Fore.GREEN}{table_name} {Fore.CYAN}table already exists!")
+            print(f"{Fore.YELLOW}WARNING: {Fore.CYAN}Dropping {Fore.GREEN}{table_name} {Fore.CYAN}table...")
             self.__dropTable(table_name)
             self.__cursor.execute(query)
 

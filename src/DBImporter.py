@@ -12,7 +12,7 @@ class DBImporter:
     def __init__(self, db_repo: DBRepository) -> None:
         self.__dbRepo = db_repo 
 
-    def importDataFromCsvFile(self, file_path: str):
+    def importDataFromCsvFile(self, file_path: str, log: bool = False):
         start = time.time()
         csvFile = open(file_path)
         csvRepo = CSVRepository(csvFile)
@@ -32,11 +32,12 @@ class DBImporter:
                     }
                 )
             insertedNo += 1
-            self.__logInsertMessage(str(insertedNo), file_path, tableName)
+            if log:
+                self.__logInsertMessage(str(insertedNo), file_path, tableName)
             
         sys.stdout.write("\n")
         end = time.time()
-        print(f"{Fore.CYAN}File {Fore.GREEN}{file_path} {Fore.CYAN}inserted in {Fore.MAGENTA}{int(end - start)}s")
+        print(f"{Fore.CYAN}File {Fore.GREEN}{file_path} {Fore.MAGENTA}({str(insertedNo)} rows) {Fore.CYAN}inserted in {Fore.MAGENTA}{int(end - start)}s")
             
 
         # print(f"{Fore.CYAN}Inserted data from {Fore.GREEN}{file_path} {Fore.CYAN}to {Fore.GREEN}{tableName} {Fore.CYAN}table.")
