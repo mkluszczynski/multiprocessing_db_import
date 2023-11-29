@@ -1,12 +1,14 @@
 from os import listdir
 from multiprocessing import Pool 
+from itertools import chain
 from lib.Repository.DBRepository import DBRepository
 from utils.Config import Config
 from src.DBImporter import DBImporter
-from src.charts import Charts
+from src.Chart import Chart
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 
 data_files_names = listdir("data")
@@ -26,37 +28,42 @@ def import_file(file, shouldLog = False):
     dbImporter.importDataFromCsvFile(file, shouldLog)
 
 
+def show_chart(chart: Chart):
+        chart.show()
+
+def process_time_summary(process_count, time_to_import):
+        sum_times = []
+        for count in process_count:
+            times = [time_to_import[i] for i in range(len(time_to_import)) if i % 4 == process_count.index(count)]
+            sum_times.append(sum(times))
+        return sum_times
+
+
+     
 if __name__ == "__main__":
-    start = time.time()
-    for file in data_files:
-        import_file(file, True) 
-    end = time.time()
-    print(f"Time taken without multiprocessing: {int(end - start)}")
+    # start = time.time()
+    # for file in data_files:
+    #     import_file(file, True) 
+    # end = time.time()
+    # print(f"Time taken without multiprocessing: {int(end - start)}")
     
 
-    start = time.time()
-    pool = Pool(len(data_files)) 
-    pool.map(import_file, data_files)
-    end = time.time()
-    print(f"Time taken using multiprocessing: {int(end - start)}")
+    # start = time.time()
+    # pool = Pool(len(data_files)) 
+    # pool.map(import_file, data_files)
+    # end = time.time()
+    # print(f"Time taken using multiprocessing: {int(end - start)}")
 
-    charts = Charts()
-    eukaryotes_numOfProcesses = charts.eukaryotes_numOfProcesses
-    eukaryotes_TimeToImport = charts.eukaryotes_TimeToImport    
-    charts.labels(eukaryotes_numOfProcesses, eukaryotes_TimeToImport, "Number of processes", "Time taken to import in seconds [s]", "Eukaryotes 3775 KB")
-    
-    organelles_numOfProcesses = charts.organelles_numOfProcesses
-    organelles_TimeToImport = charts.organelles_TimeToImport  
-    charts.labels(organelles_numOfProcesses, organelles_TimeToImport, "Number of processes", "Time taken to import in seconds [s]", "Organelles 2544 KB")
-    
-    plasmids_numOfProcesses = charts.plasmids_numOfProcesses
-    plasmids_TimeToImport = charts.plasmids_TimeToImport
-    charts.labels(plasmids_numOfProcesses, plasmids_TimeToImport, "Number of processes", "Time taken to import in seconds [s]", "Plasmids 3985 KB")
-    
-    electric_vehicle_population_numOfProcesses = charts.electric_vehicle_population_numOfProcesses
-    electric_vehicle_population_TimeToImport = charts.electric_vehicle_population_TimeToImport
-    charts.labels(electric_vehicle_population_numOfProcesses, electric_vehicle_population_TimeToImport, "Number of processes", "Time taken to import in seconds [s]", "Electric Vehicle Population 35480 KB" )
-    
-    process_count = charts.process_count
-    sum_times = charts.process_count
-    charts.labels(process_count, sum_times,"Number of processes","Sum of time taken to import files on differenct processes [s]", "Multiprocessing performance")
+    eukaryotes_chart = Chart("Eukaryotes 3775 K" ,[34, 20, 12, 7])
+    organelles_chart = Chart("Organelles 2544 KB", [49, 28, 17, 10])
+    plasmids_chart = Chart("Plasmids 3985 KB", [62, 36, 22, 13])
+    electric_chart = Chart("Electric Vehicle Population 35480 KB", [1813, 888, 519, 284])
+
+    chart_list = [eukaryotes_chart, organelles_chart, plasmids_chart, electric_chart]
+
+    summary_chart = Chart.create_summary_chart(chart_list)
+
+    chart_list.append(summary_chart)
+
+    pool = Pool(len(chart_list))
+    pool.map(show_chart, chart_list)
